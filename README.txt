@@ -1,0 +1,1 @@
+This is a presentation about AMQP, RabbitMQ's implementation and some sample C# and Python code
