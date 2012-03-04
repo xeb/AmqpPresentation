@@ -109,7 +109,7 @@
         <h2>Types</h2>
         <ul>
             <li>Connection - contains broker address</li>
-            <li>Channel - a layer of communication over the channel.  (in .NET, this is known as the "Model")</li>
+            <li>Channel - a layer of communication over the channel</li>
             <li>Message - what you're sending</li>
             <li>Exchange - a logical hub for messages</li>
             <li>Queue - for ordering receiving of messages</li>
@@ -133,7 +133,10 @@
         
         <h2>Channel</h2>
         <ul>
-            <li></li>
+            <li>In RabbitMQ's .NET this is an IModel</li>
+            <li>Data channel over the Connection</li>
+            <li>Should NOT be shared between threads</li>
+            <li>Provides AMQP operations in all implementations</li>
         </ul>
     </div>
 
@@ -141,7 +144,17 @@
         
         <h2>Message</h2>
         <ul>
-            <li></li>
+            <li>Body</li>
+            <li>Exchange</li>
+            <li>Routing Key</li>
+            <li>Basic Properties: <br/>
+                AppId - creating application id<br/>
+                CorrelationId - for correlating RPC methods<br/>
+                DeliveryMode - 1 is non-persistent, 2 is persistent<br/>
+                Priority - pretty self explanatory<br/>
+                UserId - who created the message<br/>
+                Immediate - if no one is listening, it's destroyed<br/>
+            </li>
         </ul>
     </div>
 
@@ -149,7 +162,15 @@
         
         <h2>Exchange</h2>
         <ul>
-            <li></li>
+            <li>Name</li>
+            <li>Type
+                <ul>
+                    <li>Direct - for broadcasting to <u>connected</u> clients</li>
+                    <li>Fanout - multiple clients receive the same message</li>
+                    <li>Topic - for routing based on pattern matching on the routing key</li>
+                    <li>Headers - routing based on headers</li>
+                </ul>
+            </li>
         </ul>
     </div>
 
@@ -157,7 +178,13 @@
         
         <h2>Queue</h2>
         <ul>
-            <li></li>
+            <li>Name</li>
+            <li>Passive - won't be created but errors if it doesn't already exist</li>
+            <li>Durable - peristence of messages</li>
+            <li>Exclusive - only available to the connected client</li>
+            <li>AutoDelete - it...auto-deletes messages...obviously</li>
+            <li>NoWait - no response from broker (e.g. OneWay)</li>
+            <li>Arguments - helpful to the broker for management</li>
         </ul>
     </div>
 
@@ -165,7 +192,15 @@
         
         <h2>Binding</h2>
         <ul>
-            <li></li>
+            <li>Binds a queue to a particular exchange</li>
+            <li>Types:<br/>
+                    <u>Unconditional</u> - all messages from the exchange<br/>
+                    <u>Conditional fixed</u> - routingKey must match queueName<br/>
+                    <u>Conditional pattern</u> - routingKey matches some pattern in the queueName<br/>
+                    <u>Conditional multi-*</u> - routingKey must match a number of names / patterns<br/>
+                    <u>Conditional algorithm</u> - method using headers to match
+                </ul>
+            </li>
         </ul>
     </div>
 
