@@ -23,12 +23,12 @@
 
     <div id="intro" class="step slide general" data-x="-10000" data-y="-1500">
         
-        <img src="img/amqp-logo.png" class="logo" />
+        <img src="img/amqp-logo.png" class="logo" width="65%" />
         <br/>
-        <img src="img/rabbitmq-logo.png" class="logo whitepadding" />
+        (&nbsp;&nbsp;<img src="img/rabbitmq-logo.png" class="logo whitepadding" width="25%" />&nbsp;&nbsp;)
+        <p>It's more than just queuing...</p><br/><br/>
         <p>3/7/2012</p>
         <p>Mark Kockerbeck</p>
-        <br/><br/>
         <p class="little">(this presentation was <i>also</i> done with <a href="http://bartaz.github.com/impress.js/#/bored">impress.js</a>)</p>
     </div>
 
@@ -40,7 +40,7 @@
             <li>First developed at JPMorgan Chase</li>
             <li>Began as a <strong>collaborative</strong> effort and eventually involved Bank of America, RedHat, Cisco, Credit Suisse, Goldman Sachs, Microsoft and Novell -- which became known as the <strong>AMQP Working Group</strong></li>
             <li>Conceived for trading and risk management systems so some terms (and features) reflect that origin</li>
-            <li>Owned by OASIS </li>
+            <li>Owned by OASIS</li>
             <li>Meant for middleware between internal and external systems</li>
         </ul>
     </div>
@@ -48,26 +48,52 @@
     <div id="spec" class="step slide general" data-x="-8000" data-y="-1500">
         
         <h2>Basics of the <a href="http://www.amqp.org/sites/amqp.org/files/amqp.pdf">Spec</a></h2>
-        <ul class="small">
-            <li>Publishers send Messages with Routing Keys and Exchange Names to Brokers</li>
+        <ul>
+            <li>Producers send Messages with Routing Keys and Exchange Names to Brokers</li>
             <li>Brokers use Exchange rules to route / filter Messages</li>
             <li>Brokers then use Queues to store and forward Messages for Consumers</li>
             <li>Consumers receive Messages from the Broker for known Queues</li> 
-            <li>A RoutingKey (Publish) is congruent to a QueueName (Consumption)</li>
+            <li>A RoutingKey (Producing) is congruent to a QueueName (Consumption)</li>
             <li>Exchanges only matter for routing / filtering rules</li>
         </ul>
     </div>
 
-    <div id="specgraph" class="step slide general" data-x="-8000" data-y="-2500">
+    <div id="specgraph" class="step slide general" data-x="-8000" data-y="-2500" data-rotate="90">
         
         <h2>Basics of the <a href="http://www.amqp.org/sites/amqp.org/files/amqp.pdf">Spec</a></h2>
         <img src="img/amqp-graph.png" class="whitepadding" style="height: 450px" />
     </div>
 
+    <div id="thesender" class="step slide general" data-x="-7000" data-y="-2500" data-rotate="90">
+        
+        <h2>As a Sender</a></h2>
+        <p>...I only care about the following:</p>
+        <ul>
+            <li>Broker</li>
+            <li>Exchange</li>
+            <li>Message Body (&amp; properties)</li>
+            <li>Routig Key</li>
+            <li>Queue (<i>sometimes</i>)</li>
+        </ul>
+    </div>
+
+    <div id="thereceiver" class="step slide general" data-x="-6000" data-y="-2500" data-rotate="90">
+        
+        <h2>As a Receiver</a></h2>
+        <p>...I only care about the following:</p>
+        <ul>
+            <li>Broker</li>
+            <li>Exchange</li>
+            <li>Bindings</li>
+            <li>Queue</li>
+            <li>Message Body</li>
+        </ul>
+    </div>
+
     <div id="spec2" class="step slide general" data-x="-7000" data-y="-1500">
         
         <h2>The Purpose</h2>
-        <ul class="small">
+        <ul>
             <li>&quot;Business messaging is provided by infrastructure and not by integration experts&quot;</li>
             <li>Ubiquity - all the same everywhere</li>
             <li>Safety - nobody look at my messages</li>
@@ -78,14 +104,82 @@
         </ul>
     </div>
 
-    <div id="message" class="step slide general" data-x="-7000" data-y="-1500">
+    <div id="types" class="step slide general" data-x="-6000" data-y="-1500">
         
-        <h2>A Message</h2>
-        <ul class="small">
+        <h2>Types</h2>
+        <ul>
+            <li>Connection - contains broker address</li>
+            <li>Channel - a layer of communication over the channel.  (in .NET, this is known as the "Model")</li>
+            <li>Message - what you're sending</li>
+            <li>Exchange - a logical hub for messages</li>
+            <li>Queue - for ordering receiving of messages</li>
+            <li>Binding - how queues relate to exchanges</li>
+        </ul>
+    </div>
+
+    <div id="connection" class="step slide general" data-x="-5000" data-y="-1500">
+        
+        <h2>Connection</h2>
+        <ul>
+            <li>Endpoint - the broker</li>
+            <li>Credentials - default "guest" account</li>
+            <li>AuthMechanisms - how to authenticate (i.e. LDAP plugin?? AD much!?)</li>
+            <li>VirtualHost - one broker server on a machine, many virtual hosts</li>
+            <li>Client / Server Properties - dictionary values that can be exchanged</li>
+        </ul>
+    </div>
+
+    <div id="channel" class="step slide general" data-x="-4000" data-y="-1500">
+        
+        <h2>Channel</h2>
+        <ul>
             <li></li>
         </ul>
     </div>
 
+    <div id="message" class="step slide general" data-x="-3000" data-y="-1500">
+        
+        <h2>Message</h2>
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+
+    <div id="exchange" class="step slide general" data-x="-2000" data-y="-1500">
+        
+        <h2>Exchange</h2>
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+
+    <div id="queue" class="step slide general" data-x="-1000" data-y="-1500">
+        
+        <h2>Queue</h2>
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+
+    <div id="binding" class="step slide general" data-x="0" data-y="-1500">
+        
+        <h2>Binding</h2>
+        <ul>
+            <li></li>
+        </ul>
+    </div>
+
+    <!-- 
+        Test results for 1M messages:
+            Macbook, LOCALHOST, non-durable, Python: Fin 1M msgs in 986.38564682 seconds or 1014 msgs / sec
+            PC, LOCALHOST, non-durable, C#: 1M 245.311 or 4076 msgs / sec
+
+            Macbook-to-PC, non-durable: published 100k in 22.6940369606 seconds, received in 15.531 seconds
+
+        PC is a 2.6GHz i5 Quad Core, 8GB
+        Mac is a 1.7GHz i5 Dual Core, 4GB
+
+    -->
 
     <div id="overview" class="step" data-x="-4000" data-y="0" data-scale="12">
     </div>
