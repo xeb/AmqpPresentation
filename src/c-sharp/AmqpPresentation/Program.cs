@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using AmqpPresentation.ServiceModel;
+using AmqpPresentation.ServiceModel.Contracts;
 using RabbitMQ.Client;
 
 namespace AmqpPresentation
@@ -19,15 +21,21 @@ namespace AmqpPresentation
             };
 
             var connection = connectionFactory.CreateConnection();
+            
+            //HelloWorldExample.Exec(connection);
 
-            HelloWorldExample.Exec(connection);
+            //var bindingExample = new BindingExample(connection);
+            //bindingExample.Publish();
+            //bindingExample.Consume();
+            //// Just keep running for awhile...
+            //Thread.Sleep(500000);
 
-            var bindingExample = new BindingExample(connection);
-            bindingExample.Publish();
-            bindingExample.Consume();
-            // Just keep running for awhile...
-            Thread.Sleep(500000);
+            //var echoHostStarter = new EchoServiceHostStarter();
+            //echoHostStarter.Start();
 
+            //var duplexHostStarter = new MeetAndGreetServiceHostStarter();
+            //duplexHostStarter.Start();
+            
             connection.Close();
         }
     }
