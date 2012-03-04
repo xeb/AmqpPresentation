@@ -7,7 +7,7 @@ namespace AmqpPresentation
 {
     public class Program
     {
-        public const string Broker = "10.0.1.4";
+        public const string Broker = "localhost";
         public const string Protocol = "soap.amqp";
 
         public static void Main(string[] args)
@@ -24,7 +24,9 @@ namespace AmqpPresentation
             
             //HelloWorldExample.Exec(connection);
 
-            ProtoBufExample.Exec(connection);
+            //ProtoBufExample.Exec(connection);
+
+            RpcExample.Exec(connection);
 
             //var bindingExample = new BindingExample(connection);
             //bindingExample.Publish();
@@ -35,8 +37,8 @@ namespace AmqpPresentation
             //var echoHostStarter = new EchoServiceHostStarter();
             //echoHostStarter.Start();
 
-            var duplexHostStarter = new MeetAndGreetServiceHostStarter();
-            duplexHostStarter.Start();
+            //var duplexHostStarter = new MeetAndGreetServiceHostStarter();
+            //duplexHostStarter.Start();
             
             connection.Close();
         }

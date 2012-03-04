@@ -57,11 +57,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindingExample.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="HelloWorldExample.cs" />
     <Compile Include="PerformanceExample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProtoBufExample.cs" />
+    <Compile Include="RpcExample.cs" />
     <Compile Include="ServiceModel\DuplexService.cs" />
     <Compile Include="ServiceModel\EchoService.cs" />
   </ItemGroup>
