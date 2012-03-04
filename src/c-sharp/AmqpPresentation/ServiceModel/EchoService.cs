@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Timers;
 
-namespace AmqpPresentation.ServiceModel.Contracts
+namespace AmqpPresentation.ServiceModel
 {
     [ServiceContract]
     public interface IEchoService
@@ -41,8 +41,8 @@ namespace AmqpPresentation.ServiceModel.Contracts
         private readonly ChannelFactory<IEchoService> _channelFactory;
         public EchoServiceClient()
         {
-            var binding = new RabbitMQ.ServiceModel.RabbitMQBinding("localhost", 5672);
-            _channelFactory = new ChannelFactory<IEchoService>(binding, new EndpointAddress("soap.amqp:///Echo"));
+            var binding = new RabbitMQ.ServiceModel.RabbitMQBinding(Program.Broker, 5672);
+            _channelFactory = new ChannelFactory<IEchoService>(binding, new EndpointAddress("binary.amqp:///Echo"));
         }
 
         public Echo SendEcho(Echo echo)
@@ -55,11 +55,11 @@ namespace AmqpPresentation.ServiceModel.Contracts
     public class EchoServiceHostStarter
     {
         private readonly ServiceHost _host;
-        private static readonly Timer EchoTimer = new Timer(5000);
+        private static readonly Timer EchoTimer = new Timer(1000);
 
         public EchoServiceHostStarter()
         {
-            _host = new ServiceHost(typeof(EchoService), new Uri("soap.amqp:///"));
+            _host = new ServiceHost(typeof(EchoService), new Uri("binary.amqp:///"));
             EchoTimer.Enabled = true;
             EchoTimer.Elapsed += Tick;
         }
@@ -81,7 +81,7 @@ namespace AmqpPresentation.ServiceModel.Contracts
 
         public void Start()
         {
-            var binding = new RabbitMQ.ServiceModel.RabbitMQBinding("localhost", 5672);
+            var binding = new RabbitMQ.ServiceModel.RabbitMQBinding(Program.Broker, 5672);
 
             _host.AddServiceEndpoint(typeof(IEchoService), binding, "Echo");
             _host.Open();

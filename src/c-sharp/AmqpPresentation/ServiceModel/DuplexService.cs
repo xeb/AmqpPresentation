@@ -56,9 +56,9 @@ namespace AmqpPresentation.ServiceModel
         private readonly DuplexChannelFactory<IMeetAndGreetService> _channelFactory;
         public MeetAndGreetClient()
         {
-            var binding = new RabbitMQ.ServiceModel.RabbitMQBinding("localhost", 5672);
+            var binding = new RabbitMQ.ServiceModel.RabbitMQBinding(Program.Broker, 5672);
             var instanceContext = new InstanceContext(new IfSomeoneCallsMe());
-            _channelFactory = new DuplexChannelFactory<IMeetAndGreetService>(instanceContext, binding, new EndpointAddress("soap.amqp:///MeetAndGreet"));
+            _channelFactory = new DuplexChannelFactory<IMeetAndGreetService>(instanceContext, binding, new EndpointAddress("binary.amqp:///MeetAndGreet"));
         }
 
         public void ExchangeInfo(Introduction echo)
@@ -83,14 +83,14 @@ namespace AmqpPresentation.ServiceModel
 
         public MeetAndGreetServiceHostStarter()
         {
-            _host = new ServiceHost(typeof(MeetAndGreetService), new Uri("soap.amqp:///"));
+            _host = new ServiceHost(typeof(MeetAndGreetService), new Uri("binary.amqp:///"));
             Ticker.Enabled = true;
             Ticker.Elapsed += Tick;
         }
 
         public void Start()
         {
-            var binding = new RabbitMQ.ServiceModel.RabbitMQBinding("localhost", 5672);
+            var binding = new RabbitMQ.ServiceModel.RabbitMQBinding(Program.Broker, 5672);
 
             _host.AddServiceEndpoint(typeof(IMeetAndGreetService), binding, "MeetAndGreet");
             _host.Open();

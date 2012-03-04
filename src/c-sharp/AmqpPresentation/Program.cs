@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Threading;
 using AmqpPresentation.ServiceModel;
-using AmqpPresentation.ServiceModel.Contracts;
 using RabbitMQ.Client;
 
 namespace AmqpPresentation
 {
     public class Program
     {
-        private const string _broker = "localhost";
+        public const string Broker = "10.0.1.4";
 
         public static void Main(string[] args)
         {
-            Console.WriteLine("Connecting to {0}...", _broker);
+            Console.WriteLine("Connecting to {0}...", Broker);
             var connectionFactory = new ConnectionFactory
             {
-                Endpoint = new AmqpTcpEndpoint(_broker),
+                Endpoint = new AmqpTcpEndpoint(Broker),
                 Protocol = Protocols.FromEnvironment(),
                 Port = AmqpTcpEndpoint.UseDefaultPort,       
             };
@@ -23,6 +22,8 @@ namespace AmqpPresentation
             var connection = connectionFactory.CreateConnection();
             
             //HelloWorldExample.Exec(connection);
+
+            ProtoBufExample.Exec(connection);
 
             //var bindingExample = new BindingExample(connection);
             //bindingExample.Publish();
