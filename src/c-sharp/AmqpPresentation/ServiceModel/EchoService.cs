@@ -42,7 +42,7 @@ namespace AmqpPresentation.ServiceModel
         public EchoServiceClient()
         {
             var binding = new RabbitMQ.ServiceModel.RabbitMQBinding(Program.Broker, 5672);
-            _channelFactory = new ChannelFactory<IEchoService>(binding, new EndpointAddress("binary.amqp:///Echo"));
+            _channelFactory = new ChannelFactory<IEchoService>(binding, new EndpointAddress(Program.Protocol + ":///Echo"));
         }
 
         public Echo SendEcho(Echo echo)
@@ -59,7 +59,7 @@ namespace AmqpPresentation.ServiceModel
 
         public EchoServiceHostStarter()
         {
-            _host = new ServiceHost(typeof(EchoService), new Uri("binary.amqp:///"));
+            _host = new ServiceHost(typeof(EchoService), new Uri(Program.Protocol + ":///"));
             EchoTimer.Enabled = true;
             EchoTimer.Elapsed += Tick;
         }
