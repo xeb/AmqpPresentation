@@ -26,9 +26,10 @@
         <img src="img/amqp-logo.png" class="logo" width="65%" />
         <br/>
         (&nbsp;&nbsp;<img src="img/rabbitmq-logo.png" class="logo whitepadding" width="25%" />&nbsp;&nbsp;)
-        <p>It's more than just queuing...</p><br/><br/>
+        <p>It's more than just queuing...</p><br/>
         <p>3/7/2012</p>
         <p>Mark Kockerbeck</p>
+        <p><a href="https://github.com/xeb/AmqpPresentation">Presentation Source Code</a></p>
         <p class="little">(this presentation was <i>also</i> done with <a href="http://bartaz.github.com/impress.js/#/bored">impress.js</a>)</p>
     </div>
 
@@ -236,7 +237,7 @@
             <li>Client libraries for .NET and Java</li>
             <li>Plugin Support</li>
             <li>Written in Erlang<br/>(which itself was created for high concurrency)</li>
-            <li>Open source</li>
+            <li>Open source but commercially supported by VMWare</li>
             <li>Built on the Open Telecom Platform<br/>(OSS distro of Erlang used by Erickson &amp; T-Mobile)</li>
         </ul>
     </div>
@@ -260,12 +261,12 @@
     <div id="examples" class="step slide general" data-x="2000" data-y="-1500">
         <h2>C# Examples</h2>
         <ul>
-            <li>Hello World</li>
-            <li>ProtoBuf Serialization</li>
-            <li>Topic-based Binding</li>
-            <li>RPC Server (low-level)</li>
-            <li>Basic WCF Service</li>
-            <li>Duplex WCF Service</li>
+            <li><a href="../src/c-sharp/AmqpPresentation/HelloWorldExample.cs">Hello World</a></li>
+            <li><a href="../src/c-sharp/AmqpPresentation/ProtoBufExample.cs">ProtoBuf Serialization</a></li>
+            <li><a href="../src/c-sharp/AmqpPresentation/BindingExample.cs">Topic-based Binding</a></li>
+            <li><a href="../src/c-sharp/AmqpPresentation/RpcExample.cs">RPC Server (low-level)</a></li>
+            <li><a href="../src/c-sharp/AmqpPresentation/ServiceModel/EchoService.cs">Basic WCF Service</a></li>
+            <li><a href="../src/c-sharp/AmqpPresentation/ServiceModel/DuplexService.cs">Duplex WCF Service</a></li>
         </ul>
     </div>
 
@@ -289,6 +290,18 @@
         <p>Publish to a service with a pre-determined routingKey (i.e. <u>GetDate</u>).  The service listening on this queue receives the message and publishes back with a routingKey the requester gave.  The requester is waiting for the response to come back.
         </p>
         <img src="img/rpc.png" style="margin-top:5px; background: #fff; padding: 50px;" />
+    </div>
+
+    <div id="resources" class="step slide general" data-x="0" data-y="1500">
+        <h2>Interesting Links</h2>
+        <ul>
+            <li><a href="http://wiki.secondlife.com/wiki/Message_Queue_Evaluation_Notes">Second Life - Message Queuing Evaluation Notes</a></li>
+            <li><a href="http://amqp.org">AMQP.org</a></li>
+            <li><a href="http://rabbitmq.com">RabbitMQ.com</a></li>
+            <li><a href="http://www.rabbitmq.com/blog/">RabbitMQ Blog</a></li>
+            <li><a href="http://www.rabbitmq.com/blog/2011/10/27/performance-of-queues-when-less-is-more/">Performance of RabbitMQ</a></li>
+            <li><a href="http://mud.sockjs.org/">SockJS</a> - a MUD using SockJS <br/>(WebSocket based client w/ Node.js server)</li>
+        </ul>
     </div>
 
     <div id="overview" class="step" data-x="-4000" data-y="0" data-scale="12">
