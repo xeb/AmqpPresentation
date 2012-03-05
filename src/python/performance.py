@@ -3,12 +3,12 @@ import pika
 import time
 
 # config
-print_output = False
+print_output = True
 durable = False
-ack = False
+ack = True
 num_msgs = 100000
-receive = False
-broker = "10.0.1.2"
+receive = True
+broker = "10.0.1.4"
 override_queue = "Intersystem"
 
 print "Starting..."

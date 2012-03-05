@@ -174,6 +174,12 @@
         </ul>
     </div>
 
+    <div id="exchange-types" class="step slide general" data-x="-2000" data-y="-500">
+        
+        <h2>Exchange Types</h2>
+        <img src="img/exchange-types.png" style="margin-top: 15px" />
+    </div>
+
     <div id="queue" class="step slide general" data-x="-1000" data-y="-1500">
         
         <h2>Queue</h2>
@@ -204,17 +210,86 @@
         </ul>
     </div>
 
-    <!-- 
-        Test results for 1M messages:
-            Macbook, LOCALHOST, non-durable, Python: Fin 1M msgs in 986.38564682 seconds or 1014 msgs / sec
-            PC, LOCALHOST, non-durable, C#: 1M 245.311 or 4076 msgs / sec
+    <div id="tests" class="step slide general" data-x="1000" data-y="-1500">
+        
+        <h2>Performance</h2>
+        <ul>
+            <li>Macbook (1.7GHz Dual, 4GB)<br/>1014 msg / sec (1M over 986.38 secs)</li>
+            <li>PC (2.76Hz Quad, 8GB)<br/>4076 msg / sec (1M over 245.311 secs)</li>
+            <li>Mac-to-PC<br/>440.72 msgs / sec (100k over 22.69 secs)</li>
+        </ul>
+    </div>
 
-            Macbook-to-PC, non-durable: published 100k in 22.6940369606 seconds, received in 15.531 seconds
+    <div id="wire" class="step slide general" data-x="1000" data-y="-2500">
+        
+        <h2>AMQP Over-the-wire</h2>
+        <p>Extremely easy to profile with Wireshark.  <br/>AMQP is a standard TCP wire protocol so interoperability with other systems is easy.
+        </p>
+        <img src="img/Headers.png" />
+    </div>
 
-        PC is a 2.6GHz i5 Quad Core, 8GB
-        Mac is a 1.7GHz i5 Dual Core, 4GB
+    <div id="rabbitmq" class="step slide general" data-x="1000" data-y="-3500" data-rotate="90">
+        
+        <h2><img src="img/rabbitmq-logo.png" class="whitepadding" /></h2>
+        <ul>
+            <li>AMQP server implmentation</li>
+            <li>Client libraries for .NET and Java</li>
+            <li>Plugin Support</li>
+            <li>Written in Erlang<br/>(which itself was created for high concurrency)</li>
+            <li>Open source</li>
+            <li>Built on the Open Telecom Platform<br/>(OSS distro of Erlang used by Erickson &amp; T-Mobile)</li>
+        </ul>
+    </div>
 
-    -->
+    <div id="rabbitmq-mgmt" class="step slide general" data-x="1000" data-y="-4500" data-rotate="90">
+        <h2>Management Plugin</h2>
+        <img src="img/msgs.png" style="margin-top: 15px" />
+        <img src="img/queues.png" />
+    </div>
+
+    <div id="rabbitmq-mgmt2" class="step slide general" data-x="1000" data-y="-5500" data-rotate="90">
+        <h2>Node Management</h2>
+        <img src="img/nodes.png" style="margin-top: 15px" />
+    </div>
+
+    <div id="rabbitmq-api" class="step slide general" data-x="1000" data-y="-6500" data-rotate="90">
+        <h2>HTTP API</h2>
+        <img src="img/api.png" style="margin-top: 15px" />
+    </div>
+
+    <div id="examples" class="step slide general" data-x="2000" data-y="-1500">
+        <h2>C# Examples</h2>
+        <ul>
+            <li>Hello World</li>
+            <li>ProtoBuf Serialization</li>
+            <li>Topic-based Binding</li>
+            <li>RPC Server (low-level)</li>
+            <li>Basic WCF Service</li>
+            <li>Duplex WCF Service</li>
+        </ul>
+    </div>
+
+    <div id="hello-world" class="step slide general" data-x="2000" data-y="-500">
+        <h2>Hello World</h2>
+        <p>Publish with a pre-determined routingKey, consumed with a queueName with the same value.<br/><i>Can</i> be durable if you want (or exclusive)</p>
+        <img src="img/helloworld.png" style="margin-top:5px; background: #fff; padding: 50px;" />
+    </div>
+
+    <div id="topics" class="step slide general" data-x="2000" data-y="500">
+        <h2>Topics</h2>
+        <p>Publish with a routingKey, consumed with a queueName that matches a pattern.<br/>
+            Example: Imagine a message with a routingKey of: <u>US.California.92604</u>, now imagine a queue subscribing to <u>US.*.*</u> or 
+            <u>*.California.*</u> -- those would match the routingKey and be delivered by the Exchange.  
+        </p>
+        <img src="img/topics.png" style="margin-top:5px; background: #fff; padding: 50px;" />
+    </div>
+
+    <div id="rpc" class="step slide general" data-x="2000" data-y="1500">
+        <h2>RPC</h2>
+        <p>Publish to a service with a pre-determined routingKey (i.e. <u>GetDate</u>).  The service listening on this queue receives the message and publishes back with a routingKey the requester gave.  The requester is waiting for the response to come back.
+        </p>
+        <img src="img/rpc.png" style="margin-top:5px; background: #fff; padding: 50px;" />
+    </div>
 
     <div id="overview" class="step" data-x="-4000" data-y="0" data-scale="12">
     </div>
