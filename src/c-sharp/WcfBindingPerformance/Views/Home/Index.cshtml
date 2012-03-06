@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>WCF Binding Performance Tests</h2>
+
+<p>Hosted Non-Duplex services:</p>
+<ul>
+    <li><a href="@Url.Content("~/Services/PerfTestTcp.svc")">PerfTestTcp</a></li>
+    <li><a href="@Url.Content("~/Services/PerfTestWeb.svc")">PerfTestWeb</a></li>
+    <li><a href="@Url.Content("~/Services/PerfTestBasic.svc")">PerfTestBasic</a></li>
+    <li><a href="@Url.Content("~/Services/PerfTestWs.svc")">PerfTestWs</a></li>
+    <li><a href="@WcfBindingPerformance.MvcApplication.RabbitMQBaseAddress">PerfTestRabbit</a></li>
+    <li><a href="@Url.Content("~/nancy/")">Nancy</a></li>
+    <li><a href="@Url.Content("~/services/handler.ashx")">Custom HTTP Handler</a></li>
+</ul>
+
+<p>Tests:</p>
+<ul>
+    <li><a href="@Url.Action("PerfTestTcp")">netTcpBinding</a></li>
+    <li><a href="@Url.Action("PerfTestWeb")">webHttpBinding</a></li>
+    <li><a href="@Url.Action("PerfTestBasic")">basicHttpBinding</a></li>
+    <li><a href="@Url.Action("PerfTestWs")">wsHttpBinding</a></li>
+    <li><a href="@Url.Action("PerfTestRabbit")">rabbitMQBinding</a></li>
+    <li><a href="@Url.Action("PerfTestNancy")">nancy</a></li>
+    <li><a href="@Url.Action("PerfTestHandler")">customHttpHandler</a></li>
+    <br /><br />
+    <li><a href="@Url.Action("All")">All</a></li>
+</ul>
+
+
+<p>Hosted Duplex services:</p>
+<ul>
+    <li><a href="@Url.Content("~/Services/DuplexTcp.svc")">DuplexTcp</a></li>
+    <li><a href="@Url.Content("~/Services/DuplexWs.svc")">DuplexWs</a></li>
+    <li><a href="@WcfBindingPerformance.MvcApplication.RabbitMQBaseAddress">DuplexRabbit</a></li>
+</ul>
+<p>Tests:</p>
+<ul>
+    <li><a href="@Url.Action("DuplexTcp")">netTcpBinding</a></li>
+    <li><a href="@Url.Action("DuplexWs")">wsDualHttpBinding</a></li>
+    <li><a href="@Url.Action("DuplexRabbit")">rabbitMQBinding</a></li>
+</ul>
