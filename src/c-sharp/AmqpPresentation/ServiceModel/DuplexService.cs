@@ -80,6 +80,7 @@ namespace AmqpPresentation.ServiceModel
     {
         private readonly ServiceHost _host;
         private static readonly System.Timers.Timer Ticker = new System.Timers.Timer(2000);
+        private static MeetAndGreetClient _client = new MeetAndGreetClient();
 
         public MeetAndGreetServiceHostStarter()
         {
@@ -105,9 +106,8 @@ namespace AmqpPresentation.ServiceModel
         {
             try
             {
-                var client = new MeetAndGreetClient();
                 Console.WriteLine("\r\nSending an Intro!");
-                client.ExchangeInfo(Introduction.Create());
+                _client.ExchangeInfo(Introduction.Create());
             }
             catch (Exception ex)
             {

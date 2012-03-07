@@ -11,9 +11,9 @@ namespace RabbitMQDuplexTest
 {
     public class Program
     {
-        private const int _numberThreads = 10;
-        private const int _iterations = 50;
-        private const int _batches = 2;
+        private const int _numberThreads = 1;
+        private const int _iterations = 1000;
+        private const int _batches = 1;
 
         public static void Main(string[] args)
         {

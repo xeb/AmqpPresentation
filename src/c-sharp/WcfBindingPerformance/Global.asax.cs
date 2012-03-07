@@ -34,8 +34,8 @@ namespace WcfBindingPerformance
         protected void Application_Start()
         // ReSharper restore InconsistentNaming
         {
-            //var serviceHost = new ServiceHost(typeof(DuplexRabbitService), new Uri(RabbitMQBaseAddress));
-            //serviceHost.Open();
+            var serviceHost = new ServiceHost(typeof(DuplexRabbitService), new Uri(RabbitMQBaseAddress));
+            serviceHost.Open();
 
             AreaRegistration.RegisterAllAreas();
 

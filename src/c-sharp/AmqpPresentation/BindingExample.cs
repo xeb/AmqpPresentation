@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,12 +12,17 @@ namespace AmqpPresentation
     // ReSharper disable RedundantArgumentName
     public class BindingExample
     {
+        private const int _frequency = 5000;
         private readonly IConnection _connection;
-
+        private readonly ConcurrentBag<IModel> _models = new ConcurrentBag<IModel>();
+        private const bool _writeToConsole = true;
+        private const bool _ack = false;
+        
         public BindingExample(IConnection connection)
         {
             _connection = connection;    
         }
+
         private const string _exchangeName = "BindingExample";
 
         private static readonly string[] RoutingKeys = new[]
@@ -45,7 +52,7 @@ namespace AmqpPresentation
             
             //"*.character.*.*", // all messages about a character
 
-            //"*.*.*.1234", // messages for connection 1234
+            "*.*.*.1234", // messages for connection 1234
 
             //"*.*.client.*", // all client messages
 
@@ -59,12 +66,26 @@ namespace AmqpPresentation
             model.ExchangeDeclare(_exchangeName, type: "topic", durable: false); // No need for durability
         }
 
+        private IModel GetModel()
+        {
+            IModel model;
+            if (_models.TryTake(out model))
+                return model;
+
+            return _connection.CreateModel();
+        }
+
+        private void ReturnModel(IModel model)
+        {
+            _models.Add(model);
+        }
+
         private readonly System.Timers.Timer _publishTimer = new System.Timers.Timer();
         
         public void Publish()
         {
             _publishTimer.Enabled = true;
-            _publishTimer.Interval = 5000;
+            _publishTimer.Interval = _frequency;
             _publishTimer.Elapsed += OnPublish;
 
             Console.WriteLine("Setting up Timer to publish every {0}ms", _publishTimer.Interval);
@@ -76,19 +97,24 @@ namespace AmqpPresentation
             {
                 try
                 {
-                    var model = _connection.CreateModel();
-
+                    var model = GetModel();
+                    
+                    if(_writeToConsole)
+                        Console.WriteLine("\r\n\r\n\r\n\r\n------------------------------------------------");
+                    
                     ExchangeDeclare(model);
 
                     foreach (var routingKey in RoutingKeys)
                     {
-                        Console.WriteLine("Sending message to {0}", routingKey);
+                        if (_writeToConsole)
+                            Console.WriteLine("Sending message to {0}", routingKey);
 
-                        var msg = Encoding.UTF8.GetBytes(routingKey.ToUpper());
+                        var msg = Encoding.UTF8.GetBytes("{" + string.Format("Body: {0}", routingKey) + "}");
                         model.BasicPublish(_exchangeName, routingKey, null, msg);
                     }
 
-                    Console.WriteLine("On Timer ({0})\r\n\r\n", Thread.CurrentThread.ManagedThreadId);
+                    if (_writeToConsole)
+                        Console.WriteLine("\r\nOn Timer ({0})\r\n", Thread.CurrentThread.ManagedThreadId);
                 }
                 catch (Exception ex)
                 {
@@ -99,18 +125,20 @@ namespace AmqpPresentation
 
         public void Consume()
         {
-            Console.WriteLine("Starting up consumers...");
-
+            if (_writeToConsole)
+                Console.WriteLine("Starting up consumers...");
+            var tasks = new List<Task>();
             foreach (var binding in Bindings)
             {
                 string binding1 = binding;
-                Task.Factory.StartNew(() =>
+                tasks.Add(Task.Factory.StartNew(() =>
                 {
                     try
                     {
-                        Console.WriteLine("Waiting for messages matching {0}", binding1);
+                        if (_writeToConsole)
+                            Console.WriteLine("Waiting for messages matching {0}", binding1);
                         // Each thread should have its own model (or channel) -- but we still only have one socket open
-                        var model = _connection.CreateModel();
+                        var model = GetModel();
 
                         // Declare the same exchange as the publisher
                         ExchangeDeclare(model);
@@ -137,15 +165,25 @@ namespace AmqpPresentation
                             var item = consumer.Queue.Dequeue() as BasicDeliverEventArgs;
                             lock (_connection)
                                 if (item != null)
-                                    Console.WriteLine("Received {0} \t waiting for {1}", Encoding.UTF8.GetString(item.Body), binding1);
+                                {
+                                    if (_writeToConsole)
+                                        Console.WriteLine("Received {0} \t waiting for {1}", Encoding.UTF8.GetString(item.Body), binding1);
+
+                                    // --------- NOTE ABOUT EXCLUSIVE QUEUES AND ACKING-------------------
+
+                                    if(_ack)
+                                        model.BasicAck(item.DeliveryTag, false);
+                                }
                         }
                     }
                     catch (Exception ex)
                     {
                         WriteException(ex);
                     }
-                });
+                }));
             }
+
+            Task.WaitAll(tasks.ToArray());
         }
 
         private void WriteException(Exception ex)

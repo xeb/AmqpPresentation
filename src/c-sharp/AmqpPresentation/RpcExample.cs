@@ -14,11 +14,15 @@ namespace AmqpPresentation
     {
         private const string _incomingRequests = "RequestQueue";
 
+        private static IConnection _connection;
+
         public static void Exec(IConnection connection)
         {
-            StartListening(connection.CreateModel());
-            StartSending(connection);
+            _connection = connection;
 
+            StartListening(_connection.CreateModel());
+            StartSending();
+            
             Thread.Sleep(40000);
         }
 
@@ -32,7 +36,7 @@ namespace AmqpPresentation
                 {
                     var consumer = new QueueingBasicConsumer(model);
 
-                    model.BasicConsume(_incomingRequests, false, consumer);
+                    model.BasicConsume(queue: _incomingRequests, noAck: false, consumer: consumer);
 
                     Console.WriteLine("Waiting for requests...");
                     Receive(model, consumer);
@@ -50,11 +54,15 @@ namespace AmqpPresentation
             if (request == null)
             {
                 Console.WriteLine("Request is NULL!");
+                return;
             }
             else
             {
                 var requestObj = request.Body.Deserialize<GetDateRequest>();
                 Console.WriteLine("[Server] Received Request: {0}", requestObj.ToJson());
+
+                // Ack the request
+                model.BasicAck(request.DeliveryTag, false);
 
                 // Create a reply
                 var replyQueue = request.BasicProperties.ReplyTo;
@@ -75,68 +83,69 @@ namespace AmqpPresentation
             }
         }
 
-        private static readonly System.Timers.Timer EchoTimer = new System.Timers.Timer(1000);
-        private static IConnection _connection;
+        private static readonly System.Timers.Timer EchoTimer = new System.Timers.Timer(4500);
 
-        public static void StartSending(IConnection connection)
+        public static void StartSending()
         {
             EchoTimer.Enabled = true;
             EchoTimer.Elapsed += Send;
-
-            _connection = connection;
         }
 
         public static void Send(object sender, System.Timers.ElapsedEventArgs e)
         {
-            try
+            Task.Factory.StartNew(() =>
             {
-                // create a new channel in this thread
-                var sendChannel = _connection.CreateModel();
-
-                // new correlation ID for this request
-                var myCorrelationId = Guid.NewGuid().ToString();
-                
-                // declare a queue for me to read the response
-                var myQueue = sendChannel.QueueDeclare();
-
-                // set the correlationId and replyTo queue in the basic properties (this could be done in the Body/Application Layer, but the features are built into AMQP)
-                var requestProperties = new BasicProperties
+                try
                 {
-                    ReplyTo = myQueue.QueueName,
-                    CorrelationId = myCorrelationId,
-                };
+                    if (_connection == null)
+                        return;
 
-                // Publish a send message
-                Console.WriteLine("[Client] Sent request.  Correlation ID {0}", myCorrelationId);
-                sendChannel.BasicPublish("", _incomingRequests, requestProperties, new GetDateRequest { Name = myCorrelationId}.Serialize() );
+                    // create a new channel in this thread
+                    var sendChannel = _connection.CreateModel();
 
-                // Now we need to wait for a reply
-                var queuedConsumer = new QueueingBasicConsumer(sendChannel);
-                sendChannel.BasicConsume(myQueue.QueueName, false, queuedConsumer);
+                    // new correlation ID for this request
+                    var myCorrelationId = Guid.NewGuid().ToString();
 
-                // Now we wait for a response!
-                var response = queuedConsumer.Queue.Dequeue() as BasicDeliverEventArgs;
-                if (response == null)
-                    throw new InvalidOperationException("No response!");
+                    // declare a queue for me to read the response
+                    var myQueue = sendChannel.QueueDeclare();
 
-                var correlationId = response.BasicProperties.CorrelationId;
-                Console.WriteLine("[Client] Received reply for {0}", correlationId);
+                    // set the correlationId and replyTo queue in the basic properties (this could be done in the Body/Application Layer, but the features are built into AMQP)
+                    var requestProperties = new BasicProperties
+                    {
+                        ReplyTo = myQueue.QueueName,
+                        CorrelationId = myCorrelationId,
+                    };
 
-                // Deserialize the repsonse
-                var responseObj = response.Body.Deserialize<GetDateResponse>();
-                Console.WriteLine("[Client] Received timestamp {0} it is now {1}", responseObj.Timestamp, DateTime.Now);
-            }
-            catch (Exception ex)
-            {
-                WriteException(ex);
-                throw;
-            } 
+                    // Publish a send message
+                    sendChannel.BasicPublish("", _incomingRequests, requestProperties, new GetDateRequest { Name = myCorrelationId }.Serialize());
+                    Console.WriteLine("[Client] Sent request.  Correlation ID {0}", myCorrelationId);
+
+                    // Now we need to wait for a reply
+                    var queuedConsumer = new QueueingBasicConsumer(sendChannel);
+                    sendChannel.BasicConsume(myQueue.QueueName, false, queuedConsumer);
+
+                    // Now we wait for a response!
+                    var response = queuedConsumer.Queue.Dequeue() as BasicDeliverEventArgs;
+                    if (response == null)
+                        throw new InvalidOperationException("No response!");
+
+                    var correlationId = response.BasicProperties.CorrelationId;
+                    Console.WriteLine("[Client] Received reply for {0}", correlationId);
+
+                    // Deserialize the repsonse
+                    var responseObj = response.Body.Deserialize<GetDateResponse>();
+                    Console.WriteLine("[Client] Received timestamp {0} it is now {1}\r\n----------------------------------\r\n\r\n", responseObj.Timestamp, DateTime.Now);
+                }
+                catch (Exception ex)
+                {
+                    WriteException(ex);
+                }
+            });
         }
 
         private static void DeclareQueue(IModel model)
         {
-            model.QueueDelete(_incomingRequests);
-            model.QueueDeclare(queue: _incomingRequests, durable: false, exclusive: false, autoDelete: false, arguments: null);
+            model.QueueDeclare(queue: _incomingRequests, durable: true, exclusive: false, autoDelete: false, arguments: null);
         }
 
         private static void WriteException(Exception ex)
@@ -145,6 +154,7 @@ namespace AmqpPresentation
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
                 Console.ResetColor();
             }
         }

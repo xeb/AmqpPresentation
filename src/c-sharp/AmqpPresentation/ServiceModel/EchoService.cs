@@ -56,6 +56,7 @@ namespace AmqpPresentation.ServiceModel
     {
         private readonly ServiceHost _host;
         private static readonly Timer EchoTimer = new Timer(1000);
+        private static EchoServiceClient _client = new EchoServiceClient();
 
         public EchoServiceHostStarter()
         {
@@ -68,10 +69,7 @@ namespace AmqpPresentation.ServiceModel
         {
             try
             {
-                var client = new EchoServiceClient();
-
-                client.SendEcho(Echo.Create());
-
+                _client.SendEcho(Echo.Create());
             }
             catch (Exception ex)
             {

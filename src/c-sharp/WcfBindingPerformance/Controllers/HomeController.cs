@@ -12,9 +12,9 @@ namespace WcfBindingPerformance.Controllers
 {
     public class HomeController : Controller
     {
-        private const int _numberThreads = 10;
-        private const int _iterations = 50;
-        private const int _batches = 2;
+        private const int _numberThreads = 1;
+        private const int _iterations = 1;
+        private const int _batches = 1;
 
         private const string _nancyUrl = "http://wcfbindingtest:1337/WcfBindingPerformance/nancy/";
         private const string _handlerUrl = "http://wcfbindingtest:1337/WcfBindingPerformance/services/handler.ashx";
