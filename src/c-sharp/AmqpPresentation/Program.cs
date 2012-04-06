@@ -8,7 +8,10 @@ namespace AmqpPresentation
     public class Program
     {
         public const string Broker = "localhost";
+
+        #region Protocol for WCF
         public const string Protocol = "soap.amqp";
+        #endregion
 
         public static void Main(string[] args)
         {
@@ -17,27 +20,29 @@ namespace AmqpPresentation
             {
                 Endpoint = new AmqpTcpEndpoint(Broker),
                 Protocol = Protocols.FromEnvironment(),
-                Port = AmqpTcpEndpoint.UseDefaultPort,       
+                Port = AmqpTcpEndpoint.UseDefaultPort,
             };
 
             var connection = connectionFactory.CreateConnection();
             
-            HelloWorldExample.Exec(connection);
+            //HelloWorldExample.Exec(connection);
 
+            #region Other examples
             //ProtoBufExample.Exec(connection);
 
             //RpcExample.Exec(connection);
 
-            //var bindingExample = new BindingExample(connection);
-            //bindingExample.Publish();
-            //bindingExample.Consume();
+            var bindingExample = new BindingExample(connection);
+            bindingExample.Publish();
+            bindingExample.Consume();
                         
             //var echoHostStarter = new EchoServiceHostStarter();
             //echoHostStarter.Start();
 
             //var duplexHostStarter = new MeetAndGreetServiceHostStarter();
             //duplexHostStarter.Start();
-            
+            #endregion
+
             connection.Close();
         }
     }

@@ -10,11 +10,12 @@ namespace AmqpPresentation
         {
             var model = connection.CreateModel();
             const string queueName = "DestinationQueue";
-            model.QueueDeclare(queueName, true, false, false, null);
+            model.QueueDeclare(queue: queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
 
             Console.WriteLine("Publishing!");
-            //for (int i = 0; i < 10; i++)
-                model.BasicPublish("", queueName, null, Encoding.UTF8.GetBytes("Hello World!"));
+            for (int i = 0; i < 10; i++)
+                model.BasicPublish("", // the exchange must never be null
+                    queueName, null, Encoding.UTF8.GetBytes("Hello World!"));
 
             GetResult(queueName, model);
         }

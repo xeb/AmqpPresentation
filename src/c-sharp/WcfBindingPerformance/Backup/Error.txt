@@ -1,0 +1,46 @@
+﻿An unhandled exception occurred and the process was terminated.
+
+Application ID: /LM/W3SVC/1/ROOT/WcfBindingPerformance
+
+Process ID: 21540
+
+Exception: System.Runtime.FatalException
+
+Message: Object reference not set to an instance of an object.
+
+StackTrace:    at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage4(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage31(MessageRpc& rpc)
+   at System.ServiceModel.Dispatcher.MessageRpc.Process(Boolean isOperationContextSet)
+   at System.ServiceModel.Dispatcher.ChannelHandler.DispatchAndReleasePump(RequestContext request, Boolean cleanThread, OperationContext currentOperationContext)
+   at System.ServiceModel.Dispatcher.ChannelHandler.HandleRequest(RequestContext request, OperationContext currentOperationContext)
+   at System.ServiceModel.Dispatcher.ChannelHandler.AsyncMessagePump(IAsyncResult result)
+   at System.Runtime.Fx.AsyncThunk.UnhandledExceptionFrame(IAsyncResult result)
+   at System.Runtime.AsyncResult.Complete(Boolean completedSynchronously)
+   at System.Runtime.InputQueue`1.AsyncQueueReader.Set(Item item)
+   at System.Runtime.InputQueue`1.Dispatch()
+   at System.ServiceModel.Channels.ReliableDuplexSessionChannel.ProcessDuplexMessage(WsrmMessageInfo info)
+   at System.ServiceModel.Channels.ReliableDuplexSessionChannel.HandleReceiveComplete(IAsyncResult result)
+   at System.ServiceModel.Channels.ReliableDuplexSessionChannel.OnReceiveCompletedStatic(IAsyncResult result)
+   at System.Runtime.Fx.AsyncThunk.UnhandledExceptionFrame(IAsyncResult result)
+   at System.Runtime.AsyncResult.Complete(Boolean completedSynchronously)
+   at System.ServiceModel.Channels.ReliableChannelBinder`1.InputAsyncResult`1.OnInputComplete(IAsyncResult result)
+   at System.Runtime.Fx.AsyncThunk.UnhandledExceptionFrame(IAsyncResult result)
+   at System.Runtime.AsyncResult.Complete(Boolean completedSynchronously)
+   at System.Runtime.InputQueue`1.AsyncQueueReader.Set(Item item)
+   at System.Runtime.InputQueue`1.Dispatch()
+   at System.Runtime.ActionItem.DefaultActionItem.TraceAndInvoke()
+   at System.Runtime.ActionItem.DefaultActionItem.Invoke()
+   at System.Runtime.ActionItem.CallbackHelper.InvokeWithoutContext(Object state)
+   at System.Runtime.IOThreadScheduler.ScheduledOverlapped.IOCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped* nativeOverlapped)
+   at System.Runtime.Fx.IOCompletionThunk.UnhandledExceptionFrame(UInt32 error, UInt32 bytesRead, NativeOverlapped* nativeOverlapped)
+   at System.Threading._IOCompletionCallback.PerformIOCompletionCallback(UInt32 errorCode, UInt32 numBytes, NativeOverlapped* pOVERLAP)
+
+InnerException: System.NullReferenceException
+
+Message: Object reference not set to an instance of an object.
+
+StackTrace:    at System.Web.ThreadContext.AssociateWithCurrentThread(Boolean setImpersonationContext)
+   at System.Web.HttpApplication.OnThreadEnterPrivate(Boolean setImpersonationContext)
+   at System.Web.LegacyAspNetSynchronizationContext.CallCallbackPossiblyUnderLock(SendOrPostCallback callback, Object state)
+   at System.Web.LegacyAspNetSynchronizationContext.CallCallback(SendOrPostCallback callback, Object state)
+   at System.ServiceModel.Dispatcher.ImmutableDispatchRuntime.ProcessMessage4(MessageRpc& rpc)

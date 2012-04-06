@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Framing.v0_9_1;
 
 namespace AmqpPresentation
 {
@@ -27,38 +28,41 @@ namespace AmqpPresentation
 
         private static readonly string[] RoutingKeys = new[]
         {
-            "wow.character.client.1234",
-            "wow.character.client.5678",
+            //"wow.character.client.1234",
+            //"wow.character.client.5678",
             
-            "wow.character.server.1234",
-            "wow.character.server.5678",
+            //"wow.character.server.1234",
+            //"wow.character.server.5678",
 
-            "wow.account.server.1234",
-            "wow.account.server.5678",
+            //"wow.account.server.1234",
+            //"wow.account.server.5678",
 
-            "wow.account.client.1234",
-            "wow.account.client.5678",
+            //"wow.account.client.1234",
+            //"wow.account.client.5678",
+            
+            "wow.*.client.*",
         };
 
         private static readonly string[] Bindings = new[]
         {
-            "wow.#", // all wow messages
+            //"wow.#", // all wow messages
 
-            "wow.*", // WILL NOT MATCH
-
-            "wow.*.*.*", // all wow messages
+            //"wow.*", // WILL NOT MATCH
+            
+            //"wow.*.*.*", // all wow messages
 
             //"wow.character.*.*", // all wow character messages
             
             //"*.character.*.*", // all messages about a character
 
-            "*.*.*.1234", // messages for connection 1234
+            //"*.*.*.1234", // messages for connection 1234
 
             //"*.*.client.*", // all client messages
 
             //"*.*.client.5678", // all client messages for client 5678
 
             //"wow.character.server.5678",
+            "wow.mark.client.123",
         };
 
         private static void ExchangeDeclare(IModel model)
@@ -110,7 +114,7 @@ namespace AmqpPresentation
                             Console.WriteLine("Sending message to {0}", routingKey);
 
                         var msg = Encoding.UTF8.GetBytes("{" + string.Format("Body: {0}", routingKey) + "}");
-                        model.BasicPublish(_exchangeName, routingKey, null, msg);
+                        model.BasicPublish(_exchangeName, routingKey, new BasicProperties(), msg);
                     }
 
                     if (_writeToConsole)
